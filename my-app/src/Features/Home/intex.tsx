@@ -1,6 +1,8 @@
 import { ReactElement } from "react";
 import { useNavigate } from "react-router-dom";
 
+import { StarIcon } from "@heroicons/react/16/solid";
+
 import { movies } from "../../data";
 
 import { MovieItem } from "./types/type";
@@ -12,20 +14,23 @@ export function Home(): ReactElement {
   }
 
   return (
-    <div className="flex flex-wrap pl-16">
+    <div className="flex flex-wrap pl-10 pt-7">
       {movies.map((item) => (
         <div
           key={item.id}
-          className="bg-slate-100 w-48 m-5"
+          className="w-52 m-4 rounded-lg shadow-md"
           onClick={() => goToBooking(item)}
         >
           <img
             src={require(`../../assets/image/${item.image}.jpg`)}
             alt="img"
-            className="w-48 h-64"
+            className="w-64 h-80 rounded-t-lg"
           />
-          <div className="flex justify-between pl-3 pr-3 p-2 rounded-b-lg">
-            <p>{item.rating}</p>
+          <div className="flex justify-between pl-3 pr-3 p-2 text-sm font-semibold">
+            <p className="flex gap-1">
+              <StarIcon className="h-5 w-5 fill-red-500" />
+              {item.rating}
+            </p>
             <p>{item.votes} Votes</p>
           </div>
         </div>
