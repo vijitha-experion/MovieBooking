@@ -5,7 +5,7 @@ import { StarIcon } from "@heroicons/react/16/solid";
 
 import { movies } from "../../data";
 
-import { MovieItem } from "./types/type";
+import { MovieItem } from "./types/movie";
 export function Home(): ReactElement {
   const navigate = useNavigate();
 
@@ -18,7 +18,7 @@ export function Home(): ReactElement {
       {movies.map((item) => (
         <div
           key={item.id}
-          className="w-52 m-4 rounded-lg shadow-md"
+          className="w-52 m-4 rounded-lg shadow-md cursor-pointer"
           onClick={() => goToBooking(item)}
         >
           <img
