@@ -1,6 +1,5 @@
 import { BrowserRouter } from "react-router-dom";
-
-import Router from "./Features/router/intex";
+import Router from "./router/intex";
 
 function App() {
   return (
