@@ -18,7 +18,7 @@ export const movies = [
     image: "movie-3",
     rating: 7.9,
     votes: "50K",
-    movie: "Vaishali",
+    movie: "Star",
   },
   {
     id: 4,
@@ -123,7 +123,7 @@ export const movies = [
     image: "movie-18",
     rating: 7.1,
     votes: "11.3K",
-    movie: "Star",
+    movie: "Vaishali",
   },
 ];
 
@@ -188,3 +188,52 @@ export const times = [
   { id: 5, time: "06:00 PM", type: "4K LASER ATMOS" },
   { id: 6, time: "09:00 PM", type: "4K LASER ATMOS" },
 ];
+
+export const seatsData = {
+  noOfCategory: 2,
+  noOfColumn: 2,
+  sections: [
+    {
+      name: "Left",
+      seats: [
+        ...["A", "B"].flatMap((row) =>
+          Array.from({ length: 11 }, (_, i) => ({
+            category: "Platinum",
+            row: row,
+            seatNo: i + 1,
+            columnNo: 1,
+          }))
+        ),
+        ...["C", "D", "E", "F", "G", "H", "I", "J"].flatMap((row) =>
+          Array.from({ length: 11 }, (_, i) => ({
+            category: "Gold",
+            row: row,
+            seatNo: i + 1,
+            columnNo: 1,
+          }))
+        ),
+      ],
+    },
+    {
+      name: "Right",
+      seats: [
+        ...["A", "B"].flatMap((row) =>
+          Array.from({ length: 11 }, (_, i) => ({
+            category: "Platinum",
+            row: row,
+            seatNo: i + 12,
+            columnNo: 2,
+          }))
+        ),
+        ...["C", "D", "E", "F", "G", "H", "I", "J"].flatMap((row) =>
+          Array.from({ length: 11 }, (_, i) => ({
+            category: "Gold",
+            row: row,
+            seatNo: i + 12,
+            columnNo: 2,
+          }))
+        ),
+      ],
+    },
+  ],
+};
