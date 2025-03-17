@@ -3,6 +3,7 @@ import { ReactElement, useCallback, useState } from "react";
 import { Button, Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
 
 import { useUserStore } from "./Store/userStore";
+import { useNavigate } from "react-router-dom";
 
 export function ConfirmBooking(): ReactElement {
   const user = useUserStore(useCallback((state) => state.user, []));
@@ -12,6 +13,7 @@ export function ConfirmBooking(): ReactElement {
   const movie = JSON.parse(localStorage.getItem("Movie") || "{}");
 
   const [isOpen, setIsOpen] = useState(false);
+  const navigate = useNavigate();
   function onSubmit() {}
 
   function onPayment() {
@@ -19,6 +21,7 @@ export function ConfirmBooking(): ReactElement {
   }
 
   function close() {
+    navigate("/viewTicket");
     setIsOpen(false);
   }
   return (
