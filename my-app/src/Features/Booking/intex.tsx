@@ -16,12 +16,12 @@ export function Booking(): ReactElement {
 
   function seatSelect(item: Theatres, data: Times) {
     const date = new Date().toLocaleDateString("en-GB");
-    console.log(date, "date");
     localStorage.setItem("date", JSON.stringify(date));
     navigate("/seatSelect", { state: { theatre: item, time: data } });
   }
 
-  function selectDay(index: number) {
+  function selectDay(index: number, date: string) {
+    localStorage.setItem("date", JSON.stringify(date));
     setSelectedIndex(index);
   }
 
@@ -47,7 +47,7 @@ export function Booking(): ReactElement {
                   ? "bg-red-500 text-white shadow-md"
                   : "text-black"
               }`}
-              onClick={() => selectDay(index)}
+              onClick={() => selectDay(index, futureDate.format("DD-MM-YYYY"))}
             >
               <p className="flex justify-center">{futureDate.format("dddd")}</p>
               <p className="flex justify-center">{futureDate.format("D")}</p>
