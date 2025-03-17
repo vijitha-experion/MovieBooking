@@ -1,5 +1,5 @@
 import { ReactElement, useCallback, useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import { Button, Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
 import { PencilIcon } from "@heroicons/react/24/outline";
@@ -18,6 +18,7 @@ export function SeatSelect(): ReactElement {
   const location = useLocation();
   const theatre = location.state?.theatre;
   const time = location.state?.time;
+  const navigate = useNavigate();
   const seats = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
   const [isOpen, setIsOpen] = useState(true);
@@ -70,6 +71,19 @@ export function SeatSelect(): ReactElement {
     setSelectedSeats(seatKey, seatLimit);
   }
 
+  function navigateConfirmBooking() {
+    const movieData = JSON.parse(localStorage.getItem("Movie") || "{}");
+    const movieDetails = {
+      movie: movieData.movie,
+      seats: selectedSeats,
+      theatre: theatre.Theatre,
+      time: time.time,
+      seatCount: seatLimit,
+    };
+    localStorage.setItem("movieDetails", JSON.stringify(movieDetails));
+    navigate("/confirmBooking");
+  }
+
   return (
     <div className="w-full p-14">
       <div className="flex items-center justify-between">
@@ -86,7 +100,10 @@ export function SeatSelect(): ReactElement {
             <span className="text-sm">{seatLimit} Tickets</span>
           </Button>
           {selectedSeats.length === seatLimit ? (
-            <button className="bg-red-500 text-white py-1 px-14 rounded-md">
+            <button
+              className="bg-red-500 text-white py-1 px-14 rounded-md"
+              onClick={navigateConfirmBooking}
+            >
               Rs.{seatLimit * 240} Pay
             </button>
           ) : null}
@@ -117,7 +134,7 @@ export function SeatSelect(): ReactElement {
                     } ${
                       selectedSeats.includes(`${row}-${seat.seatNo}`)
                         ? "bg-green-600 text-white"
-                        : "text-green-600"
+                        : "text-green-600 bg-white"
                     } `}
                     onClick={() => handleSeatClick(row, seat.seatNo)}
                   >
@@ -135,7 +152,7 @@ export function SeatSelect(): ReactElement {
                     } ${
                       selectedSeats.includes(`${row}-${seat.seatNo}`)
                         ? "bg-green-600 text-white"
-                        : "text-green-600"
+                        : "text-green-600 bg-white"
                     } `}
                     onClick={() => handleSeatClick(row, seat.seatNo)}
                   >
@@ -149,7 +166,7 @@ export function SeatSelect(): ReactElement {
       </div>
       <div className="flex gap-4 items-center text-xs">
         <div className="flex gap-1">
-          <div className="w-4 h-4 rounded border border-green-600 font-semibold flex items-center justify-center " />
+          <div className="w-4 h-4 rounded border border-green-600 bg-white font-semibold flex items-center justify-center " />
           <p>Available</p>
         </div>
         <div className="flex gap-1">

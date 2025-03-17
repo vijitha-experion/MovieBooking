@@ -1,5 +1,5 @@
 import { ReactElement, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
 
 import { StarIcon } from "@heroicons/react/16/solid";
@@ -10,13 +10,14 @@ import { Theatres } from "./types/theatre";
 import { Times } from "./types/theatre";
 
 export function Booking(): ReactElement {
-  const location = useLocation();
-  const movie = location.state?.movie;
+  const movie = JSON.parse(localStorage.getItem("Movie") || "{}");
   const navigate = useNavigate();
-
   const [selectedIndex, setSelectedIndex] = useState(0);
 
   function seatSelect(item: Theatres, data: Times) {
+    const date = new Date().toLocaleDateString("en-GB");
+    console.log(date, "date");
+    localStorage.setItem("date", JSON.stringify(date));
     navigate("/seatSelect", { state: { theatre: item, time: data } });
   }
 
@@ -37,12 +38,14 @@ export function Booking(): ReactElement {
       </div>
       <div className="flex py-3 gap-5 h-20 border-b-2">
         {[...Array(5)].map((_, index) => {
-          const futureDate = dayjs().add(index, "day");
+          let futureDate = dayjs().add(index, "day");
           return (
             <div
               key={index}
               className={`rounded-lg text-xs px-3 py-1 font-semibold cursor-pointer ${
-                selectedIndex === index ? "bg-red-500 text-white" : "text-black"
+                selectedIndex === index
+                  ? "bg-red-500 text-white shadow-md"
+                  : "text-black"
               }`}
               onClick={() => selectDay(index)}
             >
@@ -63,7 +66,7 @@ export function Booking(): ReactElement {
           </p>
           {times.map((data) => (
             <div
-              className="border-2 border-gray-300 w-32 px-2 py-2 rounded-md text-xs cursor-pointer"
+              className="border-2 border-gray-300 w-32 px-2 py-2 rounded-md text-xs cursor-pointer bg-white hover:shadow-lg"
               key={data.id}
               onClick={() => seatSelect(item, data)}
             >

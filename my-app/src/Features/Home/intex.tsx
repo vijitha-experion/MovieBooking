@@ -10,7 +10,8 @@ export function Home(): ReactElement {
   const navigate = useNavigate();
 
   function goToBooking(item: MovieItem) {
-    navigate("/booking", { state: { movie: item } });
+    navigate("/booking");
+    localStorage.setItem("Movie", JSON.stringify(item));
   }
 
   return (
@@ -18,7 +19,7 @@ export function Home(): ReactElement {
       {movies.map((item) => (
         <div
           key={item.id}
-          className="w-52 m-4 rounded-lg shadow-md cursor-pointer"
+          className="w-52 m-4 rounded-lg border bg-white hover:shadow-xl hover:cursor-pointer"
           onClick={() => goToBooking(item)}
         >
           <img
