@@ -4,26 +4,60 @@ import { Button, Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
 
 import { useUserStore } from "./Store/userStore";
 import { useNavigate } from "react-router-dom";
+import {
+  emailWarning,
+  incorrectEmail,
+  incorrectPattern,
+  phoneWarning,
+} from "./Utils/warning";
 
 export function ConfirmBooking(): ReactElement {
   const user = useUserStore(useCallback((state) => state.user, []));
   const setUser = useUserStore(useCallback((state) => state.setUser, []));
   const clearUser = useUserStore(useCallback((state) => state.clearUser, []));
+  const showWarning = useUserStore(
+    useCallback((state) => state.showWarning, [])
+  );
+
+  const warningPhone = showWarning(user, "phone");
+  const warningEmail = showWarning(user, "email");
   const movieData = JSON.parse(localStorage.getItem("movieDetails") || "{}");
   const movie = JSON.parse(localStorage.getItem("Movie") || "{}");
 
+  console.log(movieData, "movieData");
+  console.log(movie, "movie");
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
-  function onSubmit() {}
 
   function onPayment() {
     setIsOpen(true);
   }
 
   function close() {
+    const existingUsers = JSON.parse(
+      localStorage.getItem("UserDetails") || "[]"
+    );
+    const userArray = Array.isArray(existingUsers) ? existingUsers : [];
+    const newArray = {
+      ...user,
+      ...movieData,
+    };
+    userArray.push(newArray);
+    localStorage.setItem("UserDetails", JSON.stringify(userArray));
     navigate("/viewTicket");
     setIsOpen(false);
+    clearUser();
   }
+
+  function checkDisable() {
+    return (
+      !user?.email?.trim() ||
+      !user?.phone ||
+      showWarning(user, "email") ||
+      showWarning(user, "phone")
+    );
+  }
+
   return (
     <div className="pl-14 grid grid-cols-5 mt-14">
       <div className="h-36 bg-white col-span-3">
@@ -31,34 +65,45 @@ export function ConfirmBooking(): ReactElement {
           <p>Share your Contact Details</p>
         </div>
         <div className="flex items-center h-24 gap-3 pl-4">
-          <input
-            type="text"
-            placeholder="Email"
-            className="w-72 text-sm text-gray-700 bg-white border border-gray-400 rounded-lg px-4 py-2.5 pr-12 shadow-sm outline-none 
+          <div>
+            <input
+              type="text"
+              placeholder="Email"
+              className="w-72 text-sm text-gray-700 bg-white border border-gray-400 rounded-lg px-4 py-2.5 pr-12 shadow-sm outline-none 
               focus:border-gray-500 focus:ring-2 focus:ring-gray-200"
-            onChange={(e) => setUser(e.target.value)}
-          />
-          <input
-            type="text"
-            placeholder="Phone"
-            className="w-72 text-sm text-gray-700 bg-white border border-gray-400 rounded-lg px-4 py-2.5 pr-12 shadow-sm outline-none 
+              onChange={(e) => setUser("email", e.target.value)}
+            />
+            {warningEmail === "empty" && (
+              <p className="text-red-500 text-sm">{emailWarning}</p>
+            )}
+            {warningEmail === "pattern" && (
+              <p className="text-red-500 text-sm">{incorrectEmail}</p>
+            )}
+          </div>
+          <div>
+            <input
+              type="text"
+              placeholder="Phone"
+              className="w-72 text-sm text-gray-700 bg-white border border-gray-400 rounded-lg px-4 py-2.5 pr-12 shadow-sm outline-none 
               focus:border-gray-500 focus:ring-2 focus:ring-gray-200"
-            onChange={(e) => setUser(e.target.value)}
-          />
+              onChange={(e) => setUser("phone", e.target.value)}
+            />
+            {warningPhone === "empty" && (
+              <p className="text-red-500 text-sm">{phoneWarning}</p>
+            )}
+            {warningPhone === "pattern" && (
+              <p className="text-red-500 text-sm">{incorrectPattern}</p>
+            )}
+          </div>
           <button
-            className="bg-red-500 text-white py-2 px-14 rounded-md"
-            onClick={onSubmit}
+            className={`bg-red-500 text-white py-2 px-14 rounded-md ${
+              checkDisable() ? "cursor-not-allowed bg-red-400" : ""
+            }`}
+            onClick={onPayment}
+            disabled={checkDisable()}
           >
-            Submit
+            Pay
           </button>
-        </div>
-        <div className="bg-white mt-10">
-          <div className="bg-red-500 text-white font-semibold pl-4 p-3 h-12">
-            <p>Payment methods</p>
-          </div>
-          <div className="flex justify-center items-center p-5">
-            <button onClick={onPayment}>Pay</button>
-          </div>
         </div>
       </div>
       <div className="col-span-2 pl-20 pr-14">
@@ -106,9 +151,16 @@ export function ConfirmBooking(): ReactElement {
               transition
               className="w-full max-w-md rounded-md bg-white  backdrop-blur-2xl duration-300 ease-out data-[closed]:transform-[scale(95%)] data-[closed]:opacity-0"
             >
+              <div className="flex justify-center items-center">
+                <img
+                  src={require(`../../assets/image/Media.gif`)}
+                  alt="img"
+                  className="w-56 h-44 rounded-t-lg"
+                />{" "}
+              </div>
               <DialogTitle
                 as="h3"
-                className="font-semibold text-black flex justify-center p-6"
+                className="font-semibold text-black flex justify-center p-6 pt-0"
               >
                 Payment Success
               </DialogTitle>
