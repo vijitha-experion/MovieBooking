@@ -26,7 +26,7 @@ export const useSelectSeat = create<SeatStoreState>((set, get) => ({
   clearSelectedSeats: () => {
     set(
       produce((state: SeatStoreState) => {
-        localStorage.removeItem("editParticipant");
+        // localStorage.removeItem("editParticipant");
         state.selectedSeats = [];
       })
     );

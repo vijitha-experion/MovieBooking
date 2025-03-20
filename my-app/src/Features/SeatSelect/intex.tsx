@@ -6,6 +6,7 @@ import { PencilIcon } from "@heroicons/react/24/outline";
 
 import { seatsData } from "../../data";
 import { useSelectSeat } from "./Store/intext";
+import { existingUserDetail } from "./Types/existingUserType";
 
 export type Seat = {
   category: string;
@@ -84,6 +85,20 @@ export function SeatSelect(): ReactElement {
     navigate("/confirmBooking");
   }
 
+  const existingUsers = JSON.parse(localStorage.getItem("UserDetails") || "[]");
+  const movieData = JSON.parse(localStorage.getItem("Movie") || "{}");
+
+  const filteredData = existingUsers.filter(
+    (item: existingUserDetail) =>
+      item?.movie === movieData?.movie &&
+      item?.theatre === theatre.Theatre &&
+      item?.time === time.time &&
+      item?.seats.filter((seat) =>
+        seatsData.sections.filter((item: any) => item === seat)
+      )
+  );
+  const existingSeat = filteredData.flatMap((item: any) => item.seats);
+
   return (
     <div className="w-full p-14">
       <div className="flex items-center justify-between">
@@ -129,12 +144,14 @@ export function SeatSelect(): ReactElement {
                 {leftSeats.map((seat) => (
                   <button
                     key={`${row}-${seat.seatNo}`}
-                    className={`w-8 h-8 rounded border border-green-600 font-semibold hover:bg-green-600 hover:text-white flex items-center justify-center   ${
-                      seat.row === "B" ? "mb-6" : ""
-                    } ${
-                      selectedSeats.includes(`${row}-${seat.seatNo}`)
-                        ? "bg-green-600 text-white"
-                        : "text-green-600 bg-white"
+                    className={`w-8 h-8 rounded border font-semibold flex items-center justify-center
+                    ${seat.row === "B" ? "mb-6" : ""}
+                    ${
+                      existingSeat.includes(`${row}-${seat.seatNo}`)
+                        ? "bg-gray-300 border border-gray-300 cursor-not-allowed text-gray-400"
+                        : selectedSeats.includes(`${row}-${seat.seatNo}`)
+                        ? "bg-green-600 text-white cursor-pointer"
+                        : "border border-green-600 text-green-600 hover:bg-green-600 hover:text-white"
                     } `}
                     onClick={() => handleSeatClick(row, seat.seatNo)}
                   >
@@ -147,13 +164,15 @@ export function SeatSelect(): ReactElement {
                 {rightSeats.map((seat) => (
                   <button
                     key={`${row}-${seat.seatNo}`}
-                    className={`w-8 h-8 rounded border border-green-600 font-semibold hover:bg-green-600 hover:text-white flex items-center justify-center   ${
-                      seat.row === "B" ? "mb-6" : ""
-                    } ${
-                      selectedSeats.includes(`${row}-${seat.seatNo}`)
-                        ? "bg-green-600 text-white"
-                        : "text-green-600 bg-white"
-                    } `}
+                    className={`w-8 h-8 rounded border font-semibold flex items-center justify-center
+                  ${seat.row === "B" ? "mb-6" : ""}
+                  ${
+                    existingSeat.includes(`${row}-${seat.seatNo}`)
+                      ? "bg-gray-300 border border-gray-300 cursor-not-allowed text-gray-400"
+                      : selectedSeats.includes(`${row}-${seat.seatNo}`)
+                      ? "bg-green-600 text-white cursor-pointer"
+                      : "border border-green-600 text-green-600 hover:bg-green-600 hover:text-white"
+                  } `}
                     onClick={() => handleSeatClick(row, seat.seatNo)}
                   >
                     {seat.seatNo}
