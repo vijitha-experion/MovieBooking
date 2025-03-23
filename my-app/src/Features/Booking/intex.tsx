@@ -16,7 +16,9 @@ export function Booking(): ReactElement {
 
   function seatSelect(item: Theatres, data: Times) {
     const date = new Date().toLocaleDateString("en-GB");
-    localStorage.setItem("date", JSON.stringify(date));
+    const existDate = JSON.parse(localStorage.getItem("date") || "null");
+
+    localStorage.setItem("date", JSON.stringify(existDate ? existDate : date));
     navigate("/seatSelect", { state: { theatre: item, time: data } });
   }
 
