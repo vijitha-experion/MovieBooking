@@ -23,9 +23,8 @@ export function ConfirmBooking(): ReactElement {
   const warningEmail = showWarning(user, "email");
   const movieData = JSON.parse(localStorage.getItem("movieDetails") || "{}");
   const movie = JSON.parse(localStorage.getItem("Movie") || "{}");
+  const dates = JSON.parse(localStorage.getItem("date") || "");
 
-  console.log(movieData, "movieData");
-  console.log(movie, "movie");
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
 
@@ -41,6 +40,7 @@ export function ConfirmBooking(): ReactElement {
     const newArray = {
       ...user,
       ...movieData,
+      date: dates,
     };
     userArray.push(newArray);
     localStorage.setItem("UserDetails", JSON.stringify(userArray));

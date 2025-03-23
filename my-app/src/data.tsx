@@ -196,17 +196,8 @@ export const seatsData = {
     {
       name: "Left",
       seats: [
-        ...["A", "B"].flatMap((row) =>
+        ...["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"].flatMap((row) =>
           Array.from({ length: 11 }, (_, i) => ({
-            category: "Platinum",
-            row: row,
-            seatNo: i + 1,
-            columnNo: 1,
-          }))
-        ),
-        ...["C", "D", "E", "F", "G", "H", "I", "J"].flatMap((row) =>
-          Array.from({ length: 11 }, (_, i) => ({
-            category: "Gold",
             row: row,
             seatNo: i + 1,
             columnNo: 1,
@@ -217,17 +208,8 @@ export const seatsData = {
     {
       name: "Right",
       seats: [
-        ...["A", "B"].flatMap((row) =>
+        ...["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"].flatMap((row) =>
           Array.from({ length: 11 }, (_, i) => ({
-            category: "Platinum",
-            row: row,
-            seatNo: i + 12,
-            columnNo: 2,
-          }))
-        ),
-        ...["C", "D", "E", "F", "G", "H", "I", "J"].flatMap((row) =>
-          Array.from({ length: 11 }, (_, i) => ({
-            category: "Gold",
             row: row,
             seatNo: i + 12,
             columnNo: 2,

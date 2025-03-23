@@ -9,7 +9,6 @@ import { useSelectSeat } from "./Store/intext";
 import { existingUserDetail } from "./Types/existingUserType";
 
 export type Seat = {
-  category: string;
   row: string;
   seatNo: number;
   columnNo: number;
@@ -33,7 +32,7 @@ export function SeatSelect(): ReactElement {
     useCallback((state) => state.setSelectedSeats, [])
   );
   const clearSelectedSeats = useSelectSeat(
-    useCallback((state) => state.selectedSeats, [])
+    useCallback((state) => state.clearSelectedSeats, [])
   );
   function open() {
     setIsOpen(true);
@@ -83,22 +82,27 @@ export function SeatSelect(): ReactElement {
     };
     localStorage.setItem("movieDetails", JSON.stringify(movieDetails));
     navigate("/confirmBooking");
+    clearSelectedSeats();
   }
 
   const existingUsers = JSON.parse(localStorage.getItem("UserDetails") || "[]");
   const movieData = JSON.parse(localStorage.getItem("Movie") || "{}");
+  const dates = JSON.parse(localStorage.getItem("date") || "");
 
   const filteredData = existingUsers.filter(
     (item: existingUserDetail) =>
       item?.movie === movieData?.movie &&
       item?.theatre === theatre.Theatre &&
       item?.time === time.time &&
+      item?.date === dates &&
       item?.seats.filter((seat) =>
         seatsData.sections.filter((item: any) => item === seat)
       )
   );
+  console.log(filteredData, "filteredData");
   const existingSeat = filteredData.flatMap((item: any) => item.seats);
 
+  console.log(existingSeat, "existingSeat");
   return (
     <div className="w-full p-14">
       <div className="flex items-center justify-between">
@@ -124,6 +128,7 @@ export function SeatSelect(): ReactElement {
           ) : null}
         </div>
       </div>
+
       <div className="flex flex-col space-y-4 p-4">
         {allRows.map((row) => {
           const leftSeats = getSeatsForRow("Left", row);
@@ -145,14 +150,14 @@ export function SeatSelect(): ReactElement {
                   <button
                     key={`${row}-${seat.seatNo}`}
                     className={`w-8 h-8 rounded border font-semibold flex items-center justify-center
-                    ${seat.row === "B" ? "mb-6" : ""}
-                    ${
-                      existingSeat.includes(`${row}-${seat.seatNo}`)
-                        ? "bg-gray-300 border border-gray-300 cursor-not-allowed text-gray-400"
-                        : selectedSeats.includes(`${row}-${seat.seatNo}`)
-                        ? "bg-green-600 text-white cursor-pointer"
-                        : "border border-green-600 text-green-600 hover:bg-green-600 hover:text-white"
-                    } `}
+            ${seat.row === "B" ? "mb-6" : ""}
+            ${
+              existingSeat.includes(`${row}-${seat.seatNo}`)
+                ? "bg-gray-300 border border-gray-300 cursor-not-allowed text-gray-400"
+                : selectedSeats.includes(`${row}-${seat.seatNo}`)
+                ? "bg-green-600 text-white cursor-pointer"
+                : "border border-green-600 text-green-600 hover:bg-green-600 hover:text-white"
+            } `}
                     onClick={() => handleSeatClick(row, seat.seatNo)}
                   >
                     {seat.seatNo}
@@ -165,14 +170,14 @@ export function SeatSelect(): ReactElement {
                   <button
                     key={`${row}-${seat.seatNo}`}
                     className={`w-8 h-8 rounded border font-semibold flex items-center justify-center
-                  ${seat.row === "B" ? "mb-6" : ""}
-                  ${
-                    existingSeat.includes(`${row}-${seat.seatNo}`)
-                      ? "bg-gray-300 border border-gray-300 cursor-not-allowed text-gray-400"
-                      : selectedSeats.includes(`${row}-${seat.seatNo}`)
-                      ? "bg-green-600 text-white cursor-pointer"
-                      : "border border-green-600 text-green-600 hover:bg-green-600 hover:text-white"
-                  } `}
+          ${seat.row === "B" ? "mb-6" : ""}
+          ${
+            existingSeat.includes(`${row}-${seat.seatNo}`)
+              ? "bg-gray-300 border border-gray-300 cursor-not-allowed text-gray-400"
+              : selectedSeats.includes(`${row}-${seat.seatNo}`)
+              ? "bg-green-600 text-white cursor-pointer"
+              : "border border-green-600 text-green-600 hover:bg-green-600 hover:text-white"
+          } `}
                     onClick={() => handleSeatClick(row, seat.seatNo)}
                   >
                     {seat.seatNo}
@@ -253,4 +258,66 @@ export function SeatSelect(): ReactElement {
       </Dialog>
     </div>
   );
+}
+
+{
+  /* <div className="flex flex-col space-y-4 p-4">
+{allRows.map((row) => {
+  const leftSeats = getSeatsForRow("Left", row);
+  const rightSeats = getSeatsForRow("Right", row);
+  return (
+    <div
+      key={row}
+      className="flex items-center space-x-4 justify-center"
+    >
+      <div
+        className={`w-6 font-semibold text-gray-500 ${
+          row === "B" ? "mb-6" : ""
+        }`}
+      >
+        {row}
+      </div>
+      <div className="flex space-x-2">
+        {leftSeats.map((seat) => (
+          <button
+            key={`${row}-${seat.seatNo}`}
+            className={`w-8 h-8 rounded border font-semibold flex items-center justify-center
+            ${seat.row === "B" ? "mb-6" : ""}
+            ${
+              existingSeat.includes(`${row}-${seat.seatNo}`)
+                ? "bg-gray-300 border border-gray-300 cursor-not-allowed text-gray-400"
+                : selectedSeats.includes(`${row}-${seat.seatNo}`)
+                ? "bg-green-600 text-white cursor-pointer"
+                : "border border-green-600 text-green-600 hover:bg-green-600 hover:text-white"
+            } `}
+            onClick={() => handleSeatClick(row, seat.seatNo)}
+          >
+            {seat.seatNo}
+          </button>
+        ))}
+      </div>
+      <div className="w-12" />
+      <div className="flex space-x-2">
+        {rightSeats.map((seat) => (
+          <button
+            key={`${row}-${seat.seatNo}`}
+            className={`w-8 h-8 rounded border font-semibold flex items-center justify-center
+          ${seat.row === "B" ? "mb-6" : ""}
+          ${
+            existingSeat.includes(`${row}-${seat.seatNo}`)
+              ? "bg-gray-300 border border-gray-300 cursor-not-allowed text-gray-400"
+              : selectedSeats.includes(`${row}-${seat.seatNo}`)
+              ? "bg-green-600 text-white cursor-pointer"
+              : "border border-green-600 text-green-600 hover:bg-green-600 hover:text-white"
+          } `}
+            onClick={() => handleSeatClick(row, seat.seatNo)}
+          >
+            {seat.seatNo}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+})}
+</div> */
 }

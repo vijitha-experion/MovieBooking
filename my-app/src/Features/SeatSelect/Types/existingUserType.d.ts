@@ -6,4 +6,5 @@ export type existingUserDetail = {
   seats: [];
   theatre: string;
   time: string;
+  date: string;
 };

@@ -9,6 +9,7 @@ export function ViewTicket(): ReactElement {
 
   function backToHome() {
     navigate("/");
+    localStorage.removeItem("date");
   }
   return (
     <div className="flex flex-col items-center gap-7">
