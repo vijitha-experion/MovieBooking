@@ -8,7 +8,7 @@ export function ViewTicket(): ReactElement {
   const navigate = useNavigate();
 
   function backToHome() {
-    navigate("/");
+    navigate("/home");
     localStorage.removeItem("date");
   }
   return (
