@@ -41,6 +41,7 @@ export function Signin(): ReactElement {
           item.email === signIn.email && item.password === signIn.password
       )
     ) {
+      localStorage.setItem("signUpDetails", JSON.stringify(signInArray));
       navigate("/home");
     } else {
       console.log("Error");
@@ -103,7 +104,7 @@ export function Signin(): ReactElement {
         <button
           type="button"
           onClick={toggleVisibility}
-          className="absolute inset-y-3 -mt-36 right-44 flex items-center text-gray-400 hover:text-gray-500 transition-colors"
+          className="absolute inset-y-3 -mt-24 right-36 flex items-center text-gray-400 hover:text-gray-500 transition-colors"
           aria-label={isVisible ? "Hide password" : "Show password"}
           aria-pressed={isVisible}
           aria-controls="password"

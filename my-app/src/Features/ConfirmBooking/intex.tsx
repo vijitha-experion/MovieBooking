@@ -32,12 +32,22 @@ export function ConfirmBooking(): ReactElement {
     setIsOpen(true);
   }
 
-  function close() {
+  function viewTicket() {
     const existingUsers = JSON.parse(
       localStorage.getItem("UserDetails") || "[]"
     );
+    const signUpDetailsArray = JSON.parse(
+      localStorage.getItem("signUpDetails") || "[]"
+    );
+
+    const lastSignUp = signUpDetailsArray.length
+      ? signUpDetailsArray[signUpDetailsArray.length - 1]
+      : {};
+
     const userArray = Array.isArray(existingUsers) ? existingUsers : [];
     const newArray = {
+      signUpEmail: lastSignUp.email,
+      signUpPassword: lastSignUp.password,
       ...user,
       ...movieData,
       date: dates,
@@ -166,7 +176,7 @@ export function ConfirmBooking(): ReactElement {
               </DialogTitle>
               <div className="flex justify-center items-center p-3 border border-t border-gray-300">
                 <Button
-                  onClick={close}
+                  onClick={viewTicket}
                   className="bg-red-500 text-white py-1 px-5 rounded-md"
                 >
                   view ticket
