@@ -4,13 +4,14 @@ import { useNavigate } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
 
 import movie from "../../assets/image/movie-ticket.jpg";
-import { SignUpType } from "../SignUp/Types/signUpType";
+import { ToastContainer, toast } from "react-toastify";
 
 import { useSignInStore } from "./Store/signInStore";
 import { emailWarning, passwordWarning } from "./Utils/warning";
 
 export function Signin(): ReactElement {
   const [isVisible, setIsVisible] = useState(false);
+  const [isToast, setIsToast] = useState(false);
 
   const signIn = useSignInStore(useCallback((state) => state.signIn, []));
   const setSignIn = useSignInStore(useCallback((state) => state.setSignIn, []));
@@ -30,21 +31,24 @@ export function Signin(): ReactElement {
   }
 
   function handleSignIn() {
-    let existingSignUp = JSON.parse(
-      localStorage.getItem("signUpDetails") || "[]"
-    );
+    let UserDetails = JSON.parse(localStorage.getItem("UserDetails") || "[]");
     const signInArray = [];
     signInArray.push(signIn);
-    if (
-      existingSignUp.filter(
-        (item: SignUpType) =>
-          item.email === signIn.email && item.password === signIn.password
-      )
-    ) {
+    const array = UserDetails.filter(
+      (item: any) =>
+        item.signUpEmail === signIn.email &&
+        item.signUpPassword === signIn.password
+    );
+    console.log(array, "array");
+
+    if (array.length > 0) {
       localStorage.setItem("signUpDetails", JSON.stringify(signInArray));
       navigate("/home");
     } else {
-      console.log("Error");
+      setIsToast(true);
+      toast("Incorrect email and password", {
+        style: { color: "red" },
+      });
     }
     clearSignIn();
   }
@@ -104,7 +108,7 @@ export function Signin(): ReactElement {
         <button
           type="button"
           onClick={toggleVisibility}
-          className="absolute inset-y-3 -mt-24 right-36 flex items-center text-gray-400 hover:text-gray-500 transition-colors"
+          className="absolute inset-y-3 -mt-36 right-36 flex items-center text-gray-400 hover:text-gray-500 transition-colors"
           aria-label={isVisible ? "Hide password" : "Show password"}
           aria-pressed={isVisible}
           aria-controls="password"
@@ -128,6 +132,7 @@ export function Signin(): ReactElement {
             Not a member yet? Sign Up
           </button>
         </div>
+        {isToast ? <ToastContainer /> : null}
       </div>
     </div>
   );

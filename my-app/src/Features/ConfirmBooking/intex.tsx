@@ -152,6 +152,7 @@ export function ConfirmBooking(): ReactElement {
         open={isOpen}
         as="div"
         className="relative z-10 focus:outline-none"
+        // eslint-disable-next-line no-restricted-globals
         onClose={close}
       >
         <div className="fixed inset-0 bg-black/50" aria-hidden="true" />

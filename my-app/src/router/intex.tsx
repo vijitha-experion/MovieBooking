@@ -8,6 +8,7 @@ import { ConfirmBooking } from "../Features/ConfirmBooking/intex";
 import { ViewTicket } from "../Features/ViewTicket/intex";
 import { Signin } from "../Features/Signin/intex";
 import { SignUp } from "../Features/SignUp/intex";
+import { BookedTickets } from "../Features/BookedTickets/intex";
 
 function Router() {
   const location = useLocation();
@@ -24,6 +25,7 @@ function Router() {
         <Route path="/seatSelect" element={<SeatSelect />} />
         <Route path="/confirmBooking" element={<ConfirmBooking />} />
         <Route path="/viewTicket" element={<ViewTicket />} />
+        <Route path="/bookedTickets" element={<BookedTickets />} />
       </Routes>
     </div>
   );

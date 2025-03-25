@@ -79,6 +79,7 @@ export function SeatSelect(): ReactElement {
       theatre: theatre.Theatre,
       time: time.time,
       seatCount: seatLimit,
+      image: movieData.image,
     };
     localStorage.setItem("movieDetails", JSON.stringify(movieDetails));
     navigate("/confirmBooking");
